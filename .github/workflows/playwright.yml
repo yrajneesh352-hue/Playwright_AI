@@ -47,7 +47,7 @@ jobs:
 
       - name: 🧪 Run Playwright Tests
         run: |
-          $suite = "${{ github.event.inputs.test_suite || 'test:master' }}"
+          $suite = "${{ github.event.inputs.test_suite || 'test:e2e' }}"
           $tag = if ($suite -eq 'test:e2e') { 'end-to-end' } else { $suite -replace 'test:', '' }
           npx playwright test --grep "@$tag" --project=chromium --output=test-results
         env:

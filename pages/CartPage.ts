@@ -76,6 +76,32 @@ export class CartPage {
         return (await totalRow.locator('td').last().innerText()).trim();
     }
 
+    /**
+     * Updates the quantity for a product in the shopping cart.
+     * @param productName - Product name in the cart
+     * @param quantity - New product quantity
+     */
+    async updateProductQuantity(productName: string, quantity: string): Promise<void> {
+        const row = this.productRow(productName);
+        await row.locator('input[name^="quantity"]').fill(quantity);
+        await row.locator('button[title="Update"]').click();
+    }
+
+    /**
+     * Removes a product from the shopping cart.
+     * @param productName - Product name in the cart
+     */
+    async removeProduct(productName: string): Promise<void> {
+        await this.productRow(productName).locator('button[title="Remove"]').click();
+    }
+
+    /**
+     * Checks whether the cart displays its empty-state message.
+     */
+    async isShoppingCartEmpty(): Promise<boolean> {
+        return await this.page.getByText('Your shopping cart is empty!', { exact: true }).isVisible();
+    }
+
     private productRow(productName: string): Locator {
         return this.page.locator('#content table tbody tr').filter({
             has: this.page.getByRole('link', { name: productName, exact: true }),

@@ -61,4 +61,14 @@ test.describe('FakeStore Authentication API Tests', () => {
         expect(errorMessage, 'The response should contain the expected authentication error.')
             .toBe('username or password is incorrect');
     });
+
+    test('POST - Missing login credentials are rejected @master @regression @api', async ({ request }) => {
+        const response = await request.post(`${BASE_URL}${Routes.AUTH_LOGIN}`, {
+            data: {},
+        });
+
+        expect(response.status(), 'Missing credentials should return HTTP 400.').toBe(400);
+        expect(await response.text(), 'The response should explain which credentials are required.')
+            .toBe('username and password are not provided in JSON format');
+    });
 });
